@@ -38,6 +38,7 @@ export default function App() {
 
     return (
         <SafeAreaView style={styles.body}>
+            {}
             <StatusBar style="auto"/>
             <MainCryptoScreen tokenNamesList={tokens}
                               onUpdateTokenNamesList={onUpdateTokenNamesList}/>

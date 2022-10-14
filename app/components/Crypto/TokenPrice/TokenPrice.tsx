@@ -1,13 +1,24 @@
 import {View, Text, TouchableOpacity, TextInput, StyleSheet} from "react-native";
+import { Badge } from "@react-native-material/core";
 import React, {useEffect, useState} from "react";
 import BinanceService from "../../../services/BinanceService";
 
 interface ITokenPriceProps {
+    /**
+     * Token symbol
+     */
     symbol: string
 }
 
 interface ITokenPriceActions {
+    /**
+     * Change name of token
+     */
     onChangeToken?: (token: string) => void
+    /**
+     * Remove token
+     */
+    onRemoveToken: () => void
 }
 
 /**
@@ -65,6 +76,7 @@ const TokenPrice = (props: ITokenPriceProps & ITokenPriceActions) => {
     return !isEditMode
         ? <TouchableOpacity
             style={styles.viewModeContainer}
+            onBlur={() => {toggleEditMode()}}
             onPress={props.onChangeToken && toggleEditMode}>
             <View style={styles.panelContainer}>
                 <Text style={{color: 'white', fontSize: 12}}>{`${props.symbol.toUpperCase()}: `}</Text>
@@ -72,29 +84,45 @@ const TokenPrice = (props: ITokenPriceProps & ITokenPriceActions) => {
                 {price && priceIcon()}
             </View>
         </TouchableOpacity>
-        : <View style={styles.editModeContainer}>
-            <TextInput style={styles.input}
-                onBlur={(_) => toggleEditMode()}
-                onEndEditing={toggleEditMode}
-                onChangeText={(text) => {
-                    setPrice('')
-                    props.onChangeToken && props.onChangeToken(text)}
-            }
-                value={props.symbol}/>
+        : <View style={styles.editModeView}>
+            <View style={styles.editModeContainer}>
+                <TextInput style={styles.input}
+                           onBlur={(_) => toggleEditMode()}
+                           onEndEditing={toggleEditMode}
+                           onChangeText={(text) => {
+                               setPrice('')
+                               props.onChangeToken && props.onChangeToken(text)
+                           }
+                           }
+                           value={props.symbol}/>
+            </View>
+            <TouchableOpacity onPress={() => {
+                props.onRemoveToken()
+                toggleEditMode()
+                }
+            }>
+                <Badge style={styles.deleteButton} label="X" color="error"/>
+            </TouchableOpacity>
         </View>
 }
 
 const styles = StyleSheet.create({
+    editModeView: {
+        flexDirection: 'row'
+    },
+    deleteButton: {
+        width: 25,
+        height: 25,
+        padding: 1,
+        position: 'absolute',
+        top: -5,
+        left: -20
+    },
     panelContainer : {
         flexDirection: 'row'
     },
     editModeContainer: {
-        margin: 5,
-        backgroundColor: 'gray',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 40,
-        borderRadius: 8
+        margin: 5
     },
     viewModeContainer: {
         margin: 5,
@@ -104,16 +132,17 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         height: 40,
         borderRadius: 8,
-        padding: 10
+        padding: 5
     },
     input: {
         width: 100,
         height: 40,
         padding: 10,
-        margin: 1,
         color: 'white',
         borderWidth: 1,
-        borderRadius: 8
+        borderStyle: 'dashed',
+        borderRadius: 8,
+        backgroundColor: '#566573',
     },
 });
 

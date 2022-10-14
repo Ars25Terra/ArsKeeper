@@ -1,4 +1,4 @@
-import AxiosWebService from "./AxiosWebService";
+import {getRequestService} from "../utils/Utils";
 
 export const BINANCE_API = 'https://api.binance.com/api/v3/'
 
@@ -11,7 +11,7 @@ const BinanceService = () => {
          * Get current token price by it's symbol
          */
         getPriceBySymbol: async (symbol: string): Promise<string> => {
-            return await AxiosWebService().get(
+            return await getRequestService().get(
                 {url: `${BINANCE_API}ticker/price?symbol=${symbol.toUpperCase()}USDT`},
                 (response) => {
                     const price: string = response.data.price
@@ -31,7 +31,7 @@ const BinanceService = () => {
         getPriceBySymbolOnDate: async (symbol: string, startDate: Date, endDate: Date): Promise<string> => {
             const startTime = startDate.getTime()
             const endTime  = endDate.getTime()
-            return await AxiosWebService().get(
+            return await getRequestService().get(
                 {url: `${BINANCE_API}aggTrades?symbol=${symbol.toUpperCase()}USDT&startTime=${startTime}&endTime=${endTime}`},
                 (response) => {
                     const price: string = response.data[0]["p"]

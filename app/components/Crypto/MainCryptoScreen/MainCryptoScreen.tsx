@@ -1,6 +1,7 @@
 import {View, StyleSheet, Text} from "react-native";
 import {useState} from "react";
 import TokenPrice from "../TokenPrice/TokenPrice";
+import EmptyTokenPrice from "../TokenPrice/EmptyTokenPrice";
 
 interface IMainCryptoScreenProps {
     /**
@@ -35,14 +36,36 @@ const MainCryptoScreen = (props: IMainCryptoScreenProps & IMainCryptoScreenActio
         props.onUpdateTokenNamesList(arr)
     }
 
+    /**
+     * Handling of pressing on Empty Token
+     */
+    const onEmptyTokenPress = () => {
+        const arr: string[] = tokens.slice()
+        arr.push('BTC')
+        setTokens(arr.slice())
+        props.onUpdateTokenNamesList(arr)
+    }
+
+    /**
+     * Handling of removing the token from watch list
+     */
+    const onRemoveToken = (index: number) => {
+        const arr: string[] = tokens.slice()
+        arr.splice(index, 1)
+        setTokens(arr.slice())
+        props.onUpdateTokenNamesList(arr)
+    }
+
     return <View style={styles.container}>
         <Text style={styles.title}>Watching Crypto:</Text>
         <View style={styles.body}>
             {props.tokenNamesList.map((token, index) => {
                 return <TokenPrice key={index}
                                    symbol={token}
+                                   onRemoveToken={() => onRemoveToken(index)}
                                    onChangeToken={(token) => onChangeToken(token, index)}/>
             })}
+            {props.tokenNamesList.length < 6 && <EmptyTokenPrice onPress={onEmptyTokenPress}/>}
         </View></View>
 }
 
