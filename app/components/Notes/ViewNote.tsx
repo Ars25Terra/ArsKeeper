@@ -1,9 +1,10 @@
-import {StyleSheet, Text, TouchableHighlight, View} from "react-native";
+import {FlatList, StyleSheet, Text, TouchableHighlight, View} from "react-native";
 import {INote} from "../../models/Models";
 import moment from "moment";
 import {CryptoNote} from "../Crypto/CryptoNote/CryptoNote";
 import {IModable} from "./NotesUtils";
 import {BLUE_COLOR} from "../../utils/ColorConsts";
+import {FontAwesome5} from "@expo/vector-icons";
 
 interface IProps {
     note: INote
@@ -42,7 +43,8 @@ export const ViewNote = (props: IProps & IActions & IModable): JSX.Element => {
             right: 0,
             margin: 4,
             float: 'left',
-            borderStyle: 'solid',
+            borderStyle: 'dashed',
+            borderColor: 'gray',
             borderWidth: 1,
             minWidth: '48%',
             flexDirection: 'column'
@@ -61,6 +63,14 @@ export const ViewNote = (props: IProps & IActions & IModable): JSX.Element => {
                 { props.note.data.cryptoToken && <View style={{flex: 1, flexWrap: 'wrap', maxWidth: 100}}>
                     <CryptoNote cryptoNote={props.note.data.cryptoToken} mode={props.mode}/>
                 </View> }
+                {props.note.data.type === 'todos' && <View style={{flex: 1, flexWrap: 'wrap', maxWidth: 100}}>
+                    <FlatList style={{marginTop: 10}} data={props.note.data.todos}
+                              renderItem={(item) => <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                  {item.item.isDone && <FontAwesome5 name={'check-circle'} color={'gray'} size={15}/>}
+                                  {!item.item.isDone && <FontAwesome5 name={'circle'} color={'gray'} size={15}/>}
+                                  <Text style={{marginLeft: 5}}>{item.item.todoText}</Text>
+                              </View>}/>
+                </View>}
                 <Text style={style.date}>{noteDate}</Text>
             </>
         </TouchableHighlight>
