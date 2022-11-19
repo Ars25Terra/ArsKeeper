@@ -1,5 +1,5 @@
 import {View, StyleSheet, Text} from "react-native";
-import {useState} from "react";
+import React, {useState} from "react";
 import TokenPrice from "../TokenPrice/TokenPrice";
 import EmptyTokenPrice from "../TokenPrice/EmptyTokenPrice";
 
@@ -21,6 +21,7 @@ interface IMainCryptoScreenActions {
  * Main Screen for Crypto Section
  */
 const MainCryptoScreen = (props: IMainCryptoScreenProps & IMainCryptoScreenActions): JSX.Element => {
+
     /**
      * Watched crypto tokens state
      */
@@ -60,13 +61,14 @@ const MainCryptoScreen = (props: IMainCryptoScreenProps & IMainCryptoScreenActio
         <Text style={styles.title}>Watching Crypto:</Text>
         <View style={styles.body}>
             {props.tokenNamesList.map((token, index) => {
-                return <TokenPrice key={index}
+                return <TokenPrice key={`${token}${index}`}
                                    symbol={token}
                                    onRemoveToken={() => onRemoveToken(index)}
                                    onChangeToken={(token) => onChangeToken(token, index)}/>
             })}
             {props.tokenNamesList.length < 6 && <EmptyTokenPrice onPress={onEmptyTokenPress}/>}
-        </View></View>
+        </View>
+    </View>
 }
 
 const styles = StyleSheet.create({
@@ -82,13 +84,17 @@ const styles = StyleSheet.create({
         flex: 1,
         top: 50,
         flexDirection: 'column',
+        justifyItems: 'center',
         alignItems: 'center',
+        margin: 50
     },
     body: {
         flex: 1,
+        display: 'flex',
         flexDirection: 'row',
         flexWrap: 'wrap',
-        justifyContent: 'center'
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start'
     }
 })
 

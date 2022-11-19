@@ -16,6 +16,7 @@ const BinanceService = () => {
                 (response) => {
                     const price: string = response.data.price
                     const priceNumber: number = parseFloat(price)
+                    console.log('Binance: Price', price)
                     return !isNaN(priceNumber)
                         ? priceNumber.toFixed(2)
                         : 0

@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity, TextInput, StyleSheet} from "react-native";
-import { Badge } from "@react-native-material/core";
+import {Badge} from "@react-native-material/core";
 import React, {useEffect, useState} from "react";
 import BinanceService from "../../../services/BinanceService";
 
@@ -37,6 +37,8 @@ const TokenPrice = (props: ITokenPriceProps & ITokenPriceActions) => {
      * Edit Mode State
      */
     const [isEditMode, setIsEditMode] = useState<boolean>(false)
+
+    const [token, setToken] = useState(props.symbol)
 
     const startTime = new Date()
     startTime.setHours(0, 0, 0, 0)
@@ -76,7 +78,9 @@ const TokenPrice = (props: ITokenPriceProps & ITokenPriceActions) => {
     return !isEditMode
         ? <TouchableOpacity
             style={styles.viewModeContainer}
-            onBlur={() => {toggleEditMode()}}
+            onBlur={() => {
+                toggleEditMode()
+            }}
             onPress={props.onChangeToken && toggleEditMode}>
             <View style={styles.panelContainer}>
                 <Text style={{color: 'white', fontSize: 12}}>{`${props.symbol.toUpperCase()}: `}</Text>
@@ -87,19 +91,22 @@ const TokenPrice = (props: ITokenPriceProps & ITokenPriceActions) => {
         : <View style={styles.editModeView}>
             <View style={styles.editModeContainer}>
                 <TextInput style={styles.input}
-                           onBlur={(_) => toggleEditMode()}
+                           onBlur={(_) => {
+                               toggleEditMode()
+                               props.onChangeToken && props.onChangeToken(token)
+                           }}
                            onEndEditing={toggleEditMode}
                            onChangeText={(text) => {
+                               setToken(text)
                                setPrice('')
-                               props.onChangeToken && props.onChangeToken(text)
                            }
                            }
-                           value={props.symbol}/>
+                           value={token}/>
             </View>
             <TouchableOpacity onPress={() => {
                 props.onRemoveToken()
                 toggleEditMode()
-                }
+            }
             }>
                 <Badge style={styles.deleteButton} label="X" color="error"/>
             </TouchableOpacity>
@@ -118,7 +125,7 @@ const styles = StyleSheet.create({
         top: -5,
         left: -20
     },
-    panelContainer : {
+    panelContainer: {
         flexDirection: 'row'
     },
     editModeContainer: {
