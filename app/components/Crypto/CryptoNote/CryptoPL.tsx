@@ -33,12 +33,12 @@ export const CryptoPL = ({cryptoNote, currentTokenPrice, mode}: IProps & IModabl
      * Get average amount of user according to current Binance Price
      */
     const currentAvgTotal = (totalQuantity() * Number(currentTokenPrice)).toFixed(2)
-
+    const isLoss: boolean =  Number(currentAvgTotal) < averageHolderUSD()
     return <View style={{marginBottom: 20}}>
         <Text>
             {`Avg. Total USD: ${averageHolderUSD().toFixed(2)}$`}
         </Text>
-        {mode === ENoteMode.EDIT && <View style={{display: 'flex', flexDirection: 'row'}}>
+        {mode === ENoteMode.EDIT && <><View style={{display: 'flex', flexDirection: 'row'}}>
             {!isNaN(Number(currentTokenPrice)) && currentTokenPrice && <>
                 <Text>
                     {`Avg. Total USD at (`}
@@ -50,12 +50,18 @@ export const CryptoPL = ({cryptoNote, currentTokenPrice, mode}: IProps & IModabl
             </>}
             {!isNaN(Number(currentAvgTotal)) && currentAvgTotal && <>
                 <Text
-                    style={{color: Number(currentAvgTotal) > averageHolderUSD() ? 'green' : 'red'}}>
-                    {currentAvgTotal}
+                    style={{color: isLoss ? 'red' : 'green'}}>
+                    {currentAvgTotal}$
                 </Text>
-                <Text>$</Text>
             </>
             }
-        </View>}
+        </View>
+            <View style={{display: 'flex', flexDirection: 'row'}}>
+                <Text>PL: </Text>
+                <Text style={{color: isLoss ? 'red' : 'green'}}>
+                    {`${isLoss ? '-': '+'}${(averageHolderUSD() - Number(currentAvgTotal)).toFixed(2)}`}$
+                </Text>
+            </View>
+        </>}
     </View>
 }

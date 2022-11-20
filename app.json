@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "NativeReactProject",
-    "slug": "NativeReactProject",
-    "version": "1.0.0",
+    "name": "ArsKeeper",
+    "slug": "ars-keeper",
+    "version": "0.0.9",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,6 +21,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.arsterra.arskeeper",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

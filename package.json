@@ -24,7 +24,8 @@
     "react-native-mask-text": "^0.13.1",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-web": "~0.18.7",
-    "expo-checkbox": "~2.2.0"
+    "expo-checkbox": "~2.2.0",
+    "expo-updates": "~0.14.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -37,7 +37,12 @@ export const NotesComponent = () => {
         editNote(note)
     }
 
+    const emptyNote: boolean | undefined = (note && (!note.data.text && !note.data.caption && !note.data.cryptoToken || !note.data.cryptoToken?.name
+        || !note.data.todos || note.data.todos.length === 0
+        ))
+
     const handleNewNoteBackButtonClick = () => {
+        if (note && emptyNote) deleteNote(note)
         setNote(undefined)
     }
 
