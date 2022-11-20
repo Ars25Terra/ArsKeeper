@@ -59,7 +59,7 @@ export const CryptoPL = ({cryptoNote, currentTokenPrice, mode}: IProps & IModabl
             <View style={{display: 'flex', flexDirection: 'row'}}>
                 <Text>PL: </Text>
                 <Text style={{color: isLoss ? 'red' : 'green'}}>
-                    {`${isLoss ? '-': '+'}${(averageHolderUSD() - Number(currentAvgTotal)).toFixed(2)}`}$
+                    {`${isLoss ? '-': '+'}${Math.abs(averageHolderUSD() - Number(currentAvgTotal)).toFixed(2)}`}$
                 </Text>
             </View>
         </>}
