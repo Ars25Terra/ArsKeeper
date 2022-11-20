@@ -2,7 +2,7 @@
   "expo": {
     "name": "ArsKeeper",
     "slug": "ars-keeper",
-    "version": "0.0.9",
+    "version": "0.1.9",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "userInterfaceStyle": "light",
@@ -30,6 +30,11 @@
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "46dec312-0ea9-44da-82a4-b5c534c28b7d"
+      }
     }
   }
 }

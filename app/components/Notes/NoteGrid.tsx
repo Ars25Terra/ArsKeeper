@@ -1,7 +1,7 @@
-import {FlatList, SafeAreaView} from "react-native";
 import {INote} from "../../models/Models";
 import {ViewNote} from "./ViewNote";
 import {ENoteMode} from "./NotesUtils";
+import MasonryList from '@react-native-seoul/masonry-list';
 
 interface IProps {
     notes: INote[];
@@ -12,16 +12,12 @@ interface IActions {
 }
 
 export const NoteGrid = ({ notes, onNoteClick }: IProps & IActions) => {
-    return <SafeAreaView>
-        <FlatList
-                  key={'notesGrid'}
-                  numColumns={2}
-                  scrollEnabled
-                  keyExtractor={(item) => item.id}
-                  data={notes}
-                  renderItem={({item}) => <ViewNote key={item.id}
-                                                                                    note={item}
-                                                                                    mode={ENoteMode.VIEW}
-                                                                                    onClick={onNoteClick}/>}/>
-    </SafeAreaView>
+    return <MasonryList data={notes as INote[]}
+                   key={'notesGrid'}
+                   keyExtractor={(item) => item.id}
+                   numColumns={2}
+                   renderItem={({item}) => <ViewNote key={(item as INote).id}
+                                                                  note={item as INote}
+                                                                  mode={ENoteMode.VIEW}
+                                                                  onClick={onNoteClick}/>}/>
 }

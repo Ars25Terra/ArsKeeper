@@ -1,4 +1,4 @@
-import {Button, SafeAreaView, Text, TextInput, View} from "react-native";
+import {Button, SafeAreaView, ScrollView, Text, TextInput, View} from "react-native";
 import {ICryptoToken, ICryptoTokenDeal} from "../../../models/Models";
 import moment from "moment";
 import {useState} from "react";
@@ -47,16 +47,16 @@ export const CryptoNote = ({cryptoNote, tokenPrice, mode, onChangeDeal}: IProps 
     }
 
     return <SafeAreaView style={{width: '100%', height: '100%'}}>
-        <View style={{flex: 1}}>
+        <View style={{flex: 0.75, height: '60%'}}>
             <CryptoPL mode={mode} cryptoNote={cryptoNote} currentTokenPrice={tokenPrice}/>
-            {mode === ENoteMode.EDIT && cryptoNote.deals
+            {mode === ENoteMode.EDIT && <ScrollView style={{marginBottom: 10}} scrollEnabled={true}>{cryptoNote.deals
                 .sort((a,b) => sortCryptoDeals(a, b))
                 .map((deal, index) => <CryptoNoteDeal key={`${deal.date + index}`}
                                                                    price={deal.price}
                                                                    quantity={deal.quantity}
-                                                                   date={deal.date}/>)}
+                                                                   date={deal.date}/>)}</ScrollView>}
         </View>
-        {mode === ENoteMode.EDIT && <View style={{flex: 0.4}}>
+        {mode === ENoteMode.EDIT && <View style={{flex: 0.4, bottom: 0, height: '40%'}}>
             <TextInput keyboardType={'numeric'}
                        placeholder={'Enter price in USD...'}
                        value={deal.price}

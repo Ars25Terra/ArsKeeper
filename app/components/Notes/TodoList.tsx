@@ -1,4 +1,4 @@
-import {FlatList, TextInput, View, Button} from "react-native";
+import {TextInput, View, Button, ScrollView} from "react-native";
 import {ITodo} from "../../models/Models";
 import {Todo} from "./Todo";
 import {useState} from "react";
@@ -42,12 +42,14 @@ export const TodoList = (props: IProps & IActions) => {
     }
 
     return <View style={{width: '100%', height: '100%'}}>
-        <View style={{flex: 0.8}}>
-        <FlatList data={props.todos}
-                  renderItem={(item) =>
-                      <Todo todo={item.item} onChange={(todo) => handleOnChangeTodo(todo, item.index)}/>}/>
+        <View style={{flex: 0.75, height: '10%'}}>
+            <ScrollView scrollEnabled={true}>
+                {props.todos.map((item, index) =>
+                    <Todo key={`${item.todoText}${index}`} todo={item}
+                          onChange={(todo) => handleOnChangeTodo(todo, index)}/>)}
+            </ScrollView>
         </View>
-        <View style={{flex: 0.4, bottom: 0}}>
+        <View style={{flex: 0.4, bottom: 10}}>
             <TextInput onChangeText={handleNewTodoTextChange}
                        style={{marginBottom: 20, marginTop: 20}}
                        value={newTodo.todoText}

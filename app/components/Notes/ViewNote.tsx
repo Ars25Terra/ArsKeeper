@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, TouchableHighlight, View} from "react-native";
+import {StyleSheet, Text, TouchableHighlight, View} from "react-native";
 import {INote} from "../../models/Models";
 import moment from "moment";
 import {CryptoNote} from "../Crypto/CryptoNote/CryptoNote";
@@ -38,43 +38,44 @@ export const ViewNote = (props: IProps & IActions & IModable): JSX.Element => {
             position: 'relative',
             background: props.note.data.color ?? '#fff',
             borderRadius: 7,
-            padding: 10,
+            paddingRight: 15,
+            paddingTop: 10,
+            paddingLeft: 15,
+            paddingBottom: 5,
             left: 0,
             right: 0,
             margin: 4,
             float: 'left',
-            borderStyle: 'dashed',
-            borderColor: 'gray',
+            borderStyle: 'solid',
+            borderColor: 'silver',
             borderWidth: 1,
-            minWidth: '48%',
+            minWidth: '90%',
             flexDirection: 'column'
         }
     })
 
-    const noteDate: string  = moment(props.note.data.editDate).format('DD.MM.yyyy HH:mm')
+    const noteDate: string = moment(props.note.data.editDate).format('DD.MM.yyyy HH:mm')
     return <TouchableHighlight underlayColor={BLUE_COLOR} onPress={() => props.onClick(props.note)} style={style.note}>
-            <>
-                {props.note.data.caption && <View style={style.titleContainer}>
-                    <Text style={style.h1}>{props.note.data.caption}</Text>
-                </View>}
-                {props.note.data.text && !props.note.data.cryptoToken && <View style={style.titleContainer}>
-                    <Text style={{flex: 1, flexWrap: 'wrap'}}>{props.note.data.text}</Text>
-                </View>}
-                { props.note.data.cryptoToken && <View style={{flex: 1, flexWrap: 'wrap', maxWidth: 100}}>
-                    <CryptoNote cryptoNote={props.note.data.cryptoToken} mode={props.mode}/>
-                </View> }
-                {props.note.data.type === 'todos' && <View style={{flex: 1, flexWrap: 'wrap', maxWidth: 100}}>
-                    <FlatList style={{marginTop: 10}} data={props.note.data.todos}
-                              renderItem={(item) => <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                                  {item.item.isDone && <FontAwesome5 name={'check-circle'} color={'gray'} size={15}/>}
-                                  {!item.item.isDone && <FontAwesome5 name={'circle'} color={'gray'} size={15}/>}
-                                  <Text style={{marginLeft: 5}}>{item.item.todoText}</Text>
-                              </View>}/>
-                </View>}
-                <Text style={style.date}>{noteDate}</Text>
-            </>
-        </TouchableHighlight>
+        <>
+            {props.note.data.caption && <View style={style.titleContainer}>
+                <Text style={style.h1}>{props.note.data.caption}</Text>
+            </View>}
+            {props.note.data.text && !props.note.data.cryptoToken && <View style={style.titleContainer}>
+                <Text style={{flex: 1, flexWrap: 'wrap'}}>{props.note.data.text}</Text>
+            </View>}
+            {props.note.data.cryptoToken && <View style={{flex: 1, flexWrap: 'wrap', maxWidth: 100}}>
+                <CryptoNote cryptoNote={props.note.data.cryptoToken} mode={props.mode}/>
+            </View>}
+            {props.note.data.type === 'todos' && <View style={{flex: 1, flexWrap: 'wrap', maxWidth: 100}}>
+                {props.note.data.todos?.map((item, index) =>
+                    <View key={`${item.todoText}${index}`}
+                          style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                        {item.isDone && <FontAwesome5 name={'check-circle'} color={'gray'} size={15}/>}
+                        {!item.isDone && <FontAwesome5 name={'circle'} color={'gray'} size={15}/>}
+                        <Text style={{marginLeft: 5}}>{item.todoText}</Text>
+                    </View>)}
+            </View>}
+            <Text style={style.date}>{noteDate}</Text>
+        </>
+    </TouchableHighlight>
 }
-
-
-

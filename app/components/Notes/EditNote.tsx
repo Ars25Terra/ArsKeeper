@@ -1,5 +1,5 @@
 import {ICryptoTokenDeal, INote, ITodo} from "../../models/Models";
-import {SafeAreaView, TextInput, View, Text} from "react-native";
+import {SafeAreaView, TextInput, View, Text, KeyboardAvoidingView} from "react-native";
 import {CryptoNote} from "../Crypto/CryptoNote/CryptoNote";
 import React, {useEffect, useRef, useState} from "react";
 import binanceService from "../../services/BinanceService";
@@ -22,36 +22,42 @@ interface IAction {
 /**
  * Edit Note Component
  */
-export const EditNote = ({ note, mode, onBackButtonClick, onChangeNote, onDeleteNote }: IProps & IAction & IModable) => {
+export const EditNote = ({note, mode, onBackButtonClick, onChangeNote, onDeleteNote}: IProps & IAction & IModable) => {
 
     const [tokenPrice, setTokenPrice] = useState('0.00')
     const captionElement = useRef<TextInput>(null)
     const [captionPlaceHolderText, setCaptionPlaceHolderText] = useState<string>('Enter caption...')
 
     useEffect(() => {
-            const intervalId = setInterval(() => {
-                if (note.data?.cryptoToken) {
+        const intervalId = setInterval(() => {
+            if (note.data?.cryptoToken) {
                 binanceService.getPriceBySymbol(note.data?.cryptoToken?.name?.replace('$', ''))
                     .then(value => setTokenPrice(value))
-                }
-            }, 2000)
-            return () => clearInterval(intervalId)
+            }
+        }, 2000)
+        return () => clearInterval(intervalId)
     }, [note])
 
     const handleChangeCaption = (caption: string) => {
-        onChangeNote({...note, data: {...note.data, caption: caption} })
+        onChangeNote({...note, data: {...note.data, caption: caption}})
     }
 
     const handleChangeText = (text: string) => {
-        onChangeNote({...note, data: {...note.data, text: text} })
+        onChangeNote({...note, data: {...note.data, text: text}})
     }
 
     const handleChangeCryptoDeal = (deal: ICryptoTokenDeal) => {
         if (note.data.cryptoToken) {
-            const newNote = {...note,
-                data: {...note.data,
-                    cryptoToken: {...note.data.cryptoToken,
-                        deals: [...note.data.cryptoToken.deals, deal]}}}
+            const newNote = {
+                ...note,
+                data: {
+                    ...note.data,
+                    cryptoToken: {
+                        ...note.data.cryptoToken,
+                        deals: [...note.data.cryptoToken.deals, deal]
+                    }
+                }
+            }
             onChangeNote(newNote)
         }
     }
@@ -90,15 +96,16 @@ export const EditNote = ({ note, mode, onBackButtonClick, onChangeNote, onDelete
     }
 
     return <SafeAreaView style={{width: '100%', height: '100%'}}>
-        <View style={{padding: 20, flex: 1}}>
+        <View style={{padding: 20, flex: 0.75}}>
             <View style={{margin: 10}}>
                 {note.data.type != 'crypto' && <TextInput placeholder={captionPlaceHolderText}
-                           value={note.data.caption}
-                           ref={captionElement}
-                           style={{fontSize: 20}}
-                           maxLength={40}
-                           onChangeText={handleChangeCaption}/>}
-                {note.data.type === 'crypto' && <Text style={{fontSize: 20, fontWeight: 'bold'}}>{note.data.caption}</Text>}
+                                                          value={note.data.caption}
+                                                          ref={captionElement}
+                                                          style={{fontSize: 20}}
+                                                          maxLength={40}
+                                                          onChangeText={handleChangeCaption}/>}
+                {note.data.type === 'crypto' &&
+                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>{note.data.caption}</Text>}
             </View>
             {
                 note.data.type === 'note' && <View style={{margin: 10}}>
@@ -124,11 +131,17 @@ export const EditNote = ({ note, mode, onBackButtonClick, onChangeNote, onDelete
                 </View>
             }
         </View>
-        <View style={{display: 'flex',
-                      flex: 0.4,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      width: '100%'}}>
+        <KeyboardAvoidingView
+            style={{
+                display: 'flex',
+                flex: 0.3,
+                flexDirection: 'row',
+                bottom: 0,
+                justifyContent: 'center',
+                width: '100%'
+            }}
+            behavior={'height'}
+            keyboardVerticalOffset={0}>
             <IconButton name={'arrow-left'}
                         size={30}
                         backgroundColor={'gray'}
@@ -140,21 +153,21 @@ export const EditNote = ({ note, mode, onBackButtonClick, onChangeNote, onDelete
                         backgroundColor={note.data.type === 'note' ? BLUE_COLOR : 'gray'}
                         onPress={handleOnNoteIconClick}
                         color={'white'}
-                        />
+            />
             <IconButton name={'btc'}
                         size={30}
                         disabled={note.data.type === 'crypto'}
                         backgroundColor={note.data.type === 'crypto' ? BLUE_COLOR : 'gray'}
                         onPress={handleOnCryptoIconClick}
                         color={'white'}
-                       />
+            />
             <IconButton name={'list-ol'}
                         size={30}
                         disabled={note.data.type === 'todos'}
                         backgroundColor={note.data.type === 'todos' ? BLUE_COLOR : 'gray'}
                         onPress={handleTodoIconClick}
                         color={'white'}
-                        />
+            />
             <IconButton name={'trash-alt'}
                         size={30}
                         backgroundColor={'gray'}
@@ -163,7 +176,6 @@ export const EditNote = ({ note, mode, onBackButtonClick, onChangeNote, onDelete
                             onDeleteNote(note)
                         }}
             />
-
-        </View>
+        </KeyboardAvoidingView>
     </SafeAreaView>
 }
