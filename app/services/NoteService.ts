@@ -33,12 +33,10 @@ export const createNote = (): Promise<INote> => {
 export const editNote = (note: INote) => {
     const updatedNote = {...note, data: {...note.data, editDate: moment.now()}}
     const args = [JSON.stringify(updatedNote.data), note.id]
-    console.log('Service: Edit Note Args =>', args)
     repoEditNote(args)
 }
 
 export const deleteNote = (note: INote) => {
-    console.log('Service: ', note.id)
     repoDeleteNode(note.id)
 }
 
@@ -46,7 +44,6 @@ export const getNotes = async (): Promise<INote[]> => {
     return new Promise((resolve, _) => {
         let result: INote[] = []
         repoGetNotes().then((data: ResultSet) => {
-            console.log('Service: Get All Notes Promise Resolve =>', data.rows)
             data.rows.forEach(item => {
                 result.push(
                     {
@@ -55,7 +52,6 @@ export const getNotes = async (): Promise<INote[]> => {
                     }
                 )
             })
-            console.log('Service: Get All Notes Result =>', result)
             resolve(result.sort((a, b) => b.data.editDate - a.data.editDate))
         })
     })

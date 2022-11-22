@@ -18,22 +18,19 @@ export const createTable = async () => {
 export const createNote = async (args: string): Promise<string> => {
     let insertedId = '-1'
     return new Promise((resolve, reject) => {
-        console.log('Repo: Create New Note Args => ', args)
         db.exec([CREATE_NOTE_QUERY(args)], false, (error, data) => {
             if (error) {
                 console.error('Repo: Create New Note ERROR =>', error)
                 reject(() => {throw new Error('Could not create new ViewNote')})
             }
             insertedId = String(((data as unknown) as ResultSet[])[0].insertId)
-            console.log('Repo: Create New Note Result =>', insertedId)
             resolve(insertedId)
         })
     })
 }
 
 export const editNote = async (args: (string | number)[]) => {
-    await db.exec([UPDATE_NOTE_QUERY(args)], false, (error, result) => {
-        console.log('ViewNote Updated', result)
+    await db.exec([UPDATE_NOTE_QUERY(args)], false, (_, __) => {
     })
 }
 
@@ -47,7 +44,6 @@ export const getNotes = async ():Promise<ResultSet> => {
                     })
                 } else {
                     const rows: ResultSet[] = (res as unknown) as ResultSet[]
-                    console.log('Repo: GetNotes -> Rows', rows)
                     resolve(rows[0])
                 }
             })
@@ -55,8 +51,7 @@ export const getNotes = async ():Promise<ResultSet> => {
 }
 
 export const deleteNode = async (id: string) => {
-    await db.exec([DELETE_NOTE_QUERY(id)], false, (error, result) => {
-        console.log('Repo: Note Deleted', result)
+    await db.exec([DELETE_NOTE_QUERY(id)], false, (_, __) => {
     })
 }
 
@@ -69,7 +64,6 @@ export const getNoteById = async (id: string):Promise<ResultSet> => {
                 })
             } else {
                 const rows: ResultSet[] = (res as unknown) as ResultSet[]
-                console.log(rows[0])
                 resolve(rows[0])
             }
         })

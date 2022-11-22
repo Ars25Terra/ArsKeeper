@@ -8,7 +8,7 @@ export async function putInStorage(key: string, value: any) {
     try {
         await AsyncStorage.setItem(key, value)
     } catch (e) {
-        console.log(e)
+        console.error(e)
     }
 }
 
@@ -19,7 +19,7 @@ export async function getFromStorage(key: string): Promise<string | null> {
     try {
         return await AsyncStorage.getItem(key)
     } catch (e) {
-        console.log(e)
+        console.error(e)
     }
     return null
 }

@@ -3,13 +3,15 @@ import {StyleSheet, SafeAreaView, View} from 'react-native';
 import React, {useCallback, useEffect} from "react";
 import {createTable} from "./app/repository/NotesRepository";
 import {NotesComponent} from "./app/components/Notes/NotesComponent";
+import {Swiper} from "./app/components/Swiper/Swiper";
+import {TravelComponent} from "./app/components/Travel/TravelComponent";
 
 export default function App() {
     const createDB = useCallback(async () => {
         try {
             await createTable()
         } catch (e) {
-            console.log(e.message)
+            console.error(e.message)
         }
     }, [])
 
@@ -21,8 +23,8 @@ export default function App() {
         <SafeAreaView style={styles.body}>
             <StatusBar style="auto"/>
             <View>
-                <View style={{marginTop: 50}}/>
-                <NotesComponent/>
+                <View style={{marginTop: 40}}/>
+                <Swiper pages={[<NotesComponent/>, <TravelComponent/>]}/>
             </View>
         </SafeAreaView>
     )

@@ -19,7 +19,7 @@ export const NotesComponent = () => {
         (async function () {
             try {
                 await getNotes().then(res => {
-                    setNotes(res);
+                    setNotes(res.filter(note => note.data.type != 'travel'));
                 });
             } catch (e) {
                 console.warn(e);
@@ -33,7 +33,6 @@ export const NotesComponent = () => {
     }
 
     const handleSaveNewNoteClick = (note: INote) => {
-        console.log('Notes Component: note =>', note)
         editNote(note)
     }
 
@@ -54,11 +53,9 @@ export const NotesComponent = () => {
     }
 
     const handleChangeNote = (note: INote) => {
-        console.log('ChangeNote: Note.Deals => ', note.data.cryptoToken?.deals)
         const tokenName = getCryptoToken(note)
         let updatedNote = {...note}
         if (tokenName) {
-            console.log('In New Crypto')
             const existingNote = findExistingCryptoNote(tokenName)
             if (existingNote) {
                 deleteNote(updatedNote)
@@ -87,7 +84,7 @@ export const NotesComponent = () => {
         setNote(undefined)
     }
 
-    return <SafeAreaView>
+    return <SafeAreaView style={{width: '100%', backgroundColor: 'white'}}>
         {!note && <>
             <NoteGridContainer notes={notes} onNoteClick={handleOnNoteClick}/>
             <View style={{position: 'absolute', bottom: 60, right: 20}}>
